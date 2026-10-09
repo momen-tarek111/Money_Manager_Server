@@ -4,18 +4,19 @@
 
 ### Secure, scalable REST API for personal finance management
 
-Built with **Spring Boot**, **Spring Security (JWT)**, **Spring Data JPA** and **MySQL**
+Built with **Spring Boot 4**, **Spring Security (JWT)**, **Spring Data JPA** and **MySQL**
 
-![Java](https://img.shields.io/badge/Java-17+-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
-![Spring Security](https://img.shields.io/badge/Spring_Security-JWT-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
+![Java](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.1.1-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![Spring Security](https://img.shields.io/badge/Spring_Security-JWT_0.11.5-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![Cloudinary](https://img.shields.io/badge/Cloudinary-Media-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white)
+![Apache POI](https://img.shields.io/badge/Apache_POI-5.2.5-D22128?style=for-the-badge&logo=apache&logoColor=white)
+![Brevo](https://img.shields.io/badge/Brevo-SMTP-0B996E?style=for-the-badge&logo=brevo&logoColor=white)
 ![Maven](https://img.shields.io/badge/Maven-Build-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
 
 ### 🎬 [▶ Watch the Full Demo Video](YOUR_GOOGLE_DRIVE_VIDEO_LINK)
 
-[Frontend Repo](YOUR_FRONTEND_REPO_LINK) · [Demo Video](YOUR_GOOGLE_DRIVE_VIDEO_LINK) · [Report a Bug](../../issues)
+[Frontend Repo](https://github.com/momen-tarek111/Money-Manager-App.git) · [Demo Video](YOUR_GOOGLE_DRIVE_VIDEO_LINK) · [Report a Bug](../../issues)
 
 </div>
 
@@ -25,9 +26,9 @@ Built with **Spring Boot**, **Spring Security (JWT)**, **Spring Data JPA** and *
 
 **Money Manager System** is a full-stack personal finance platform that helps users track income and expenses, understand their spending through analytics, and stay consistent with daily email reminders.
 
-This repository contains the **backend REST API**. It handles authentication, transaction management, media uploads, report generation, and scheduled email notifications.
+This repository contains the **backend REST API**. It handles authentication, transaction management, Excel report generation, and scheduled email notifications.
 
-> 🖥️ The React client lives in a separate repository: **[Money Manager — Frontend](YOUR_FRONTEND_REPO_LINK)**
+> 🖥️ The React client lives in a separate repository: **[Money Manager — Frontend](https://github.com/momen-tarek111/Money-Manager-App.git)**
 
 ---
 
@@ -36,14 +37,15 @@ This repository contains the **backend REST API**. It handles authentication, tr
 | | Feature | Description |
 |---|---|---|
 | 🔐 | **JWT Authentication** | Stateless register/login with Spring Security and signed JSON Web Tokens |
+| ✉️ | **Email Account Activation** | New accounts are activated through a link sent by email |
 | 💵 | **Income & Expense Management** | Full CRUD with server-side validation (Bean Validation) |
 | 🗂️ | **Categories** | Organize transactions by custom categories with emoji icons |
-| 🖼️ | **Profile Pictures** | Image upload and storage through Cloudinary |
+| 🖼️ | **Profile Pictures** | Stores each user's avatar (uploaded to Cloudinary from the React client) |
 | 📊 | **Analytics Endpoints** | Aggregated data powering the dashboard charts |
-| 📥 | **Download Transactions** | Export transaction history as an Excel file (`.xlsx`) |
-| 📧 | **Email Transactions** | Send the Excel (`.xlsx`) transactions report directly to the user's inbox |
+| 📥 | **Download Transactions** | Export incomes and expenses as Excel files (`.xlsx`) using Apache POI |
+| 📧 | **Email Transactions** | Send the Excel (`.xlsx`) report directly to the user's inbox via Brevo SMTP |
 | ⏰ | **Daily Email Reminders** | Scheduled jobs remind users to log their daily spending |
-| 🛡️ | **Secure by Default** | Password hashing, protected routes, CORS configuration |
+| 🛡️ | **Secure by Default** | BCrypt password hashing, protected routes, CORS configuration |
 
 ---
 
@@ -55,8 +57,8 @@ flowchart LR
     B --> C[Controllers]
     C --> D[Services]
     D --> E[(MySQL via Spring Data JPA)]
-    D --> F[Cloudinary]
-    D --> G[SMTP Mail Server]
+    D --> F[Apache POI - Excel]
+    D --> G[Brevo SMTP]
     H[Scheduler] --> D
 ```
 
@@ -66,62 +68,67 @@ flowchart LR
 
 ## 🧰 Tech Stack
 
-- **Language:** Java 17+
-- **Framework:** Spring Boot
-- **Security:** Spring Security + JWT
-- **Persistence:** Spring Data JPA (Hibernate)
-- **Database:** MySQL
-- **Media Storage:** Cloudinary
-- **Email:** Spring Mail (SMTP)
-- **Scheduling:** Spring `@Scheduled`
-- **Build Tool:** Maven
+| Category | Technology | Version |
+|---|---|---|
+| Language | Java | 21 |
+| Framework | Spring Boot (Web MVC) | 4.1.1 |
+| Security | Spring Security | managed by Spring Boot |
+| JWT | JJWT (`jjwt-api`, `jjwt-impl`, `jjwt-jackson`) | 0.11.5 |
+| Persistence | Spring Data JPA (Hibernate) | managed by Spring Boot |
+| Database | MySQL + MySQL Connector/J | 8.x |
+| Excel Export | Apache POI (`poi-ooxml`) | 5.2.5 |
+| Email | Spring Mail + Brevo SMTP | managed by Spring Boot |
+| Boilerplate | Lombok | managed by Spring Boot |
+| Build Tool | Maven | 3.9+ |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-src/main/java/com/moneymanager
-├── config          # Security, CORS, JWT, Cloudinary & mail configuration
+src/main/java/in/momentarek/moneymanager
+├── config          # Security, CORS & application configuration
 ├── controller      # REST controllers
 ├── dto             # Request / response objects
 ├── entity          # JPA entities
 ├── repository      # Spring Data JPA repositories
-├── security        # JWT filter & utilities
+├── security        # JWT filter & security utilities
 ├── service         # Business logic
-└── scheduler       # Daily reminder jobs
+└── util            # Generate and verify JWT tokens
 ```
-
-> Adjust the package names above to match your actual structure.
 
 ---
 
 ## 🔌 API Overview
 
-> Replace with your real routes if they differ.
+**Base URL:** `http://localhost:8080/api/v1.0`
+
+> Every endpoint below is relative to the base URL (context path `/api/v1.0`).
 
 ### Auth
 | Method | Endpoint | Description |
 |---|---|---|
-| `POST` | `/api/auth/register` | Create a new account |
-| `POST` | `/api/auth/login` | Authenticate and receive a JWT |
+| `POST` | `/register` | Create a new account |
+| `POST` | `/login` | Authenticate and receive a JWT |
 
 ### Transactions
 | Method | Endpoint | Description |
 |---|---|---|
-| `GET` | `/api/incomes` | List incomes |
-| `POST` | `/api/incomes` | Add an income |
-| `DELETE` | `/api/incomes/{id}` | Delete an income |
-| `GET` | `/api/expenses` | List expenses |
-| `POST` | `/api/expenses` | Add an expense |
-| `DELETE` | `/api/expenses/{id}` | Delete an expense |
+| `GET` | `/incomes` | List incomes |
+| `POST` | `/incomes` | Add an income |
+| `DELETE` | `/incomes/{id}` | Delete an income |
+| `GET` | `/expenses` | List expenses |
+| `POST` | `/expenses` | Add an expense |
+| `DELETE` | `/expenses/{id}` | Delete an expense |
 
 ### Dashboard & Reports
 | Method | Endpoint | Description |
 |---|---|---|
-| `GET` | `/api/dashboard` | Totals and chart data |
-| `GET` | `/api/reports/download` | Download transactions as Excel (`.xlsx`) |
-| `POST` | `/api/reports/email` | Email the Excel report to the user |
+| `GET` | `/dashboard` | Totals and chart data |
+| `GET` | `/excel/download/income` | Download incomes as Excel (`.xlsx`) |
+| `GET` | `/excel/download/expense` | Download expenses as Excel (`.xlsx`) |
+| `GET` | `/email/income-excel` | Email the Excel income report to the user |
+| `GET` | `/email/expense-excel` | Email the Excel expense report to the user |
 
 Protected routes require the header:
 
@@ -135,55 +142,76 @@ Authorization: Bearer <your_jwt_token>
 
 ### Prerequisites
 
-- JDK 17 or newer
-- Maven 3.8+
+- JDK 21
+- Maven 3.9+
 - MySQL 8+
-- A [Cloudinary](https://cloudinary.com) account
-- An SMTP account (Gmail app password, Brevo, Mailtrap, etc.)
+- A [Brevo](https://www.brevo.com) account (free SMTP relay) for emails
 
 ### 1. Clone the repository
 
 ```bash
-git clone YOUR_BACKEND_REPO_LINK
-cd money-manager-backend
+git clone https://github.com/momen-tarek111/Money-Manager-App.git
+cd Money_Manager_Server
 ```
 
 ### 2. Create the database
 
 ```sql
-CREATE DATABASE money_manager;
+CREATE DATABASE moneymanager;
 ```
 
-### 3. Configure environment
+### 3. Configure environment variables
 
-Edit `src/main/resources/application.properties` (or use environment variables):
+The app reads everything from environment variables and falls back to local defaults where it makes sense (`src/main/resources/application.properties`):
 
 ```properties
-# Database
-spring.datasource.url=jdbc:mysql://localhost:3306/money_manager
-spring.datasource.username=YOUR_DB_USER
-spring.datasource.password=YOUR_DB_PASSWORD
+# 1. Database (cloud URL if provided, otherwise local MySQL)
+spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/moneymanager}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME:root}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
+
+# 2. Server port & context path (hosting platforms pass $PORT dynamically)
+server.port=${PORT:8080}
+server.servlet.context-path=/api/v1.0
+
+# 3. JPA / Hibernate (use 'validate' or 'none' in production)
 spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=false
+spring.jpa.properties.hibernate.format_sql=false
 
-# JWT
-jwt.secret=YOUR_LONG_RANDOM_SECRET
-jwt.expiration=86400000
-
-# Cloudinary
-cloudinary.cloud-name=YOUR_CLOUD_NAME
-cloudinary.api-key=YOUR_API_KEY
-cloudinary.api-secret=YOUR_API_SECRET
-
-# Mail
-spring.mail.host=smtp.gmail.com
+# 4. Email (Brevo SMTP)
+spring.mail.host=smtp-relay.brevo.com
 spring.mail.port=587
-spring.mail.username=YOUR_EMAIL
-spring.mail.password=YOUR_APP_PASSWORD
+spring.mail.username=${BREVO_USERNAME}
+spring.mail.password=${BREVO_PASSWORD}
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.protocol=smtp
+spring.mail.properties.mail.smtp.from=${BREVO_FROM_EMAIL}
+
+# 5. Security & JWT
+jwt.secret=${JWT_SECRET}
+jwt.expiration=86400000
+
+# 6. Frontend & backend URLs
+money.manager.frontend.url=${MONEY_MANAGER_FRONTEND_URL:http://localhost:3000}
+app.activation.url=${MONEY_MANAGER_BACKEND_URL:http://localhost:8080}
 ```
 
-> ⚠️ Never commit real secrets. Use environment variables or a git-ignored properties file.
+| Variable | Required | Description |
+|---|---|---|
+| `SPRING_DATASOURCE_URL` | Optional | JDBC URL (defaults to local MySQL) |
+| `SPRING_DATASOURCE_USERNAME` | Optional | Database user (default `root`) |
+| `SPRING_DATASOURCE_PASSWORD` | ✅ | Database password |
+| `PORT` | Optional | Server port (default `8080`) |
+| `BREVO_USERNAME` | ✅ | Brevo SMTP login |
+| `BREVO_PASSWORD` | ✅ | Brevo SMTP key |
+| `BREVO_FROM_EMAIL` | ✅ | Verified sender address |
+| `JWT_SECRET` | ✅ | Long random secret used to sign tokens |
+| `MONEY_MANAGER_FRONTEND_URL` | Optional | Frontend origin (CORS and email links) |
+| `MONEY_MANAGER_BACKEND_URL` | Optional | Public backend URL used in activation links |
+
+> ⚠️ Never commit real passwords or secrets. Keep them in environment variables and generate a fresh `JWT_SECRET` for every environment.
 
 ### 4. Run the application
 
@@ -191,7 +219,20 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 mvn spring-boot:run
 ```
 
-The API will be available at **http://localhost:8080**
+The API will be available at **http://localhost:8080/api/v1.0**
+
+### 5. Build for production
+
+```bash
+mvn clean package
+java -jar target/moneymanager-0.0.1-SNAPSHOT.jar
+```
+
+---
+
+## ☁️ Deployment
+
+The configuration is cloud-ready: the port comes from `$PORT`, and the database, mail and JWT settings come from environment variables, so it deploys easily to platforms such as **Render**, **Railway** or any Docker host. Set `ddl-auto` to `validate` or `none` in production.
 
 ---
 
@@ -202,6 +243,7 @@ The API will be available at **http://localhost:8080**
 - Protected endpoints enforced via a custom JWT authentication filter
 - Input validation on all write operations
 - CORS restricted to the frontend origin
+- All secrets are supplied through environment variables
 
 ---
 
