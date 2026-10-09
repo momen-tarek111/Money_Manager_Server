@@ -14,9 +14,9 @@ Built with **Spring Boot 4**, **Spring Security (JWT)**, **Spring Data JPA** and
 ![Brevo](https://img.shields.io/badge/Brevo-SMTP-0B996E?style=for-the-badge&logo=brevo&logoColor=white)
 ![Maven](https://img.shields.io/badge/Maven-Build-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
 
-### 🎬 [▶ Watch the Full Demo Video](YOUR_GOOGLE_DRIVE_VIDEO_LINK)
+### 🎬 [▶ Watch the Full Demo Video](https://drive.google.com/file/d/1olxFyz-vF0IOY_kU3CUsPkTuShyTrhNa/view?usp=sharing)
 
-[Frontend Repo](https://github.com/momen-tarek111/Money-Manager-App.git) · [Demo Video](YOUR_GOOGLE_DRIVE_VIDEO_LINK) · [Report a Bug](../../issues)
+[Frontend Repo](https://github.com/momen-tarek111/Money-Manager-App.git) · [Demo Video](https://drive.google.com/file/d/1olxFyz-vF0IOY_kU3CUsPkTuShyTrhNa/view?usp=sharing) · [Report a Bug](../../issues)
 
 </div>
 
